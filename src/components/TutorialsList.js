@@ -1,32 +1,100 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import Pagination from "@material-ui/lab/Pagination";
 import TutorialDataService from "../services/TutorialService";
 import { useTable } from "react-table";
+import styled from 'styled-components'
+
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return <input type="checkbox" ref={resolvedRef} {...rest} />
+  }
+)
+const Styles = styled.div` 
+  padding: 1rem;
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+      :last-child {
+        border-right: 0;
+      }
+    }
+  }
+`
 
 const TutorialsList = (props) => {
   const [tutorials, setTutorials] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const tutorialsRef = useRef();
 
-  tutorialsRef.current = tutorials;
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [pageSize, setPageSize] = useState(3);
 
-  useEffect(() => {
-    retrieveTutorials();
-  }, []);
+  const pageSizes = [3, 6, 9];
+
+  tutorialsRef.current = tutorials;
 
   const onChangeSearchTitle = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
   };
 
+  const getRequestParams = (searchTitle, page, pageSize) => {
+    let params = {};
+
+    if (searchTitle) {
+      params["title"] = searchTitle;
+    }
+
+    if (page) {
+      params["page"] = page - 1;
+    }
+
+    if (pageSize) {
+      params["size"] = pageSize;
+    }
+
+    return params;
+  };
+
   const retrieveTutorials = () => {
-    TutorialDataService.getAll()
+    const params = getRequestParams(searchTitle, page, pageSize);
+
+    TutorialDataService.getAll(params)
       .then((response) => {
-        setTutorials(response.data);
+        const { tutorials, totalPages } = response.data;
+
+        setTutorials(tutorials);
+        setCount(totalPages);
+
+        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
       });
   };
+
+  useEffect(retrieveTutorials, [page, pageSize]);
 
   const refreshList = () => {
     retrieveTutorials();
@@ -44,13 +112,8 @@ const TutorialsList = (props) => {
   };
 
   const findByTitle = () => {
-    TutorialDataService.findByTitle(searchTitle)
-      .then((response) => {
-        setTutorials(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    setPage(1);
+    retrieveTutorials();
   };
 
   const openTutorial = (rowIndex) => {
@@ -76,25 +139,69 @@ const TutorialsList = (props) => {
       });
   };
 
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
+
   const columns = useMemo(
     () => [
       {
-        Header: "Title",
-        accessor: "title",
+        Header: "Nro Acta",
+        accessor: "acta",
       },
       {
-        Header: "Description",
-        accessor: "description",
+        Header: "Fecha",
+        accessor: "fecha",
       },
       {
-        Header: "Status",
-        accessor: "published",
-        Cell: (props) => {
-          return props.value ? "Published" : "Pending";
-        },
+        Header: "Nombre",
+        accessor: "nombre",
       },
       {
-        Header: "Actions",
+        Header: "CUIT o DNI",
+        accessor: "dni",
+      },
+      {
+        Header: "Descripcion",
+        accessor: "descripcion",
+      },
+      {
+        Header: "Lugar Infraccion",
+        accessor: "lugar",
+      },
+     
+      
+      {
+        Header: "Vehiculo",
+        accessor: "vehiculo",
+      },
+      {
+        Header: "Dominio",
+        accessor: "dominio",
+      },
+      {
+        Header: "Agente",
+        accessor: "agente",
+      },
+      {
+        Header: "Resolucion",
+        accessor: "actoResolutorio",
+      },
+      {
+        Header: "Fecha Resolucion",
+        accessor: "fechaResolucion",
+      },
+      {
+        Header: "Ley/Ordenanza",
+        accessor: "leyOrdenanza",
+      },
+      {
+        Header: "Acciones",
         accessor: "actions",
         Cell: (props) => {
           const rowIdx = props.row.id;
@@ -119,6 +226,8 @@ const TutorialsList = (props) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    allColumns,
+    getToggleHideAllColumnsProps,
     rows,
     prepareRow,
   } = useTable({
@@ -127,6 +236,7 @@ const TutorialsList = (props) => {
   });
 
   return (
+    <Styles>
     <div className="list row">
       <div className="col-md-8">
         <div className="input-group mb-3">
@@ -148,7 +258,48 @@ const TutorialsList = (props) => {
           </div>
         </div>
       </div>
+
       <div className="col-md-12 list">
+        <div className="mt-3">
+          {"Items per Page: "}
+          <select onChange={handlePageSizeChange} value={pageSize}>
+            {pageSizes.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+
+          <Pagination
+            className="my-3"
+            count={count}
+            page={page}
+            siblingCount={1}
+            boundaryCount={1}
+            variant="outlined"
+            shape="rounded"
+            onChange={handlePageChange}
+          />
+        </div>
+        <div>
+        <div>
+          <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> 
+          Todas las Columnas
+        </div > 
+        <div className="row">
+        {allColumns.map(column => (
+          
+          <div key={column.id} className="col-md-4">
+            <label>
+              <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+              {column.id}
+            </label>
+         
+          </div>
+        ))}
+         </div>
+        <br />
+      </div>    
         <table
           className="table table-striped table-bordered"
           {...getTableProps()}
@@ -187,6 +338,7 @@ const TutorialsList = (props) => {
         </button>
       </div>
     </div>
+    </Styles>
   );
 };
 
