@@ -8,7 +8,7 @@ import "./App.css";
 import AddTutorial from "./components/AddTutorial";
 import Tutorial from "./components/Tutorial";
 import TutorialsList from "./components/TutorialsList";
-
+import Update from "./components/Update";
 function App() {
   return (
     <div>
@@ -34,7 +34,7 @@ function App() {
         <Switch>
           <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
           <Route exact path="/add" component={AddTutorial} />
-          <Route path="/tutorials/:id" component={Tutorial} />
+          <Route path="/tutorials/:id" component={Update} />
         </Switch>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import Pagination from "@material-ui/lab/Pagination";
 import TutorialDataService from "../services/TutorialService";
-import { useTable } from "react-table";
-import styled from 'styled-components'
+import { useTable, useBlockLayout, useResizeColumns  } from "react-table";
+
+import { Styles } from "./style";
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -16,41 +17,17 @@ const IndeterminateCheckbox = React.forwardRef(
     return <input type="checkbox" ref={resolvedRef} {...rest} />
   }
 )
-const Styles = styled.div` 
-  padding: 1rem;
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
 
 const TutorialsList = (props) => {
   const [tutorials, setTutorials] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
   const tutorialsRef = useRef();
-
+  const [buscar, setBuscar] = useState("");
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState(5);
 
-  const pageSizes = [3, 6, 9];
+  const pageSizes = [5,10,15];
 
   tutorialsRef.current = tutorials;
 
@@ -59,13 +36,15 @@ const TutorialsList = (props) => {
     setSearchTitle(searchTitle);
   };
 
-  const getRequestParams = (searchTitle, page, pageSize) => {
+  const getRequestParams = (searchTitle,campo, page, pageSize) => {
     let params = {};
 
     if (searchTitle) {
       params["title"] = searchTitle;
     }
-
+    if (campo) {
+      params["campo"] = campo;
+    }
     if (page) {
       params["page"] = page - 1;
     }
@@ -78,8 +57,8 @@ const TutorialsList = (props) => {
   };
 
   const retrieveTutorials = () => {
-    const params = getRequestParams(searchTitle, page, pageSize);
-
+    const params = getRequestParams(searchTitle,buscar, page, pageSize);
+    console.log(params)
     TutorialDataService.getAll(params)
       .then((response) => {
         const { tutorials, totalPages } = response.data;
@@ -87,7 +66,7 @@ const TutorialsList = (props) => {
         setTutorials(tutorials);
         setCount(totalPages);
 
-        console.log(response.data);
+        console.log("recibido",response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -142,17 +121,41 @@ const TutorialsList = (props) => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-
+  const handleBuscar=(event)=>{
+    console.log(event.target.value)
+    setBuscar(event.target.value)
+  }
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
     setPage(1);
   };
+  const busqueda=[
+    {
+      Header: "Nombre",
+      accessor: "nombre",
+    },
+    {
+      Header: "CUIT o DNI",
+      accessor: "dni",
+    },
+    {
+      Header: "Nro Acta",
+      accessor: "acta",
+      
+    },
+    {
+      Header: "Dominio",
+      accessor: "dominio",
+    },
 
+
+  ]
   const columns = useMemo(
     () => [
       {
         Header: "Nro Acta",
         accessor: "acta",
+        
       },
       {
         Header: "Fecha",
@@ -161,6 +164,22 @@ const TutorialsList = (props) => {
       {
         Header: "Nombre",
         accessor: "nombre",
+      },
+      {
+        Header: "Direccion",
+        accessor: "direccion",
+      },
+      {
+        Header: "Codigo Postal",
+        accessor: "codigoPostal",
+      },
+      {
+        Header: "Localidad",
+        accessor: "localidad",
+      },
+      {
+        Header: "Provincia",
+        accessor: "provincia",
       },
       {
         Header: "CUIT o DNI",
@@ -201,6 +220,26 @@ const TutorialsList = (props) => {
         accessor: "leyOrdenanza",
       },
       {
+        Header: "Articulo",
+        accessor: "articulo",
+      },
+      {
+        Header: "Inciso",
+        accessor: "inciso",
+      },
+      {
+        Header: "Comentario",
+        accessor: "comentario",
+      },
+      {
+        Header: "Intervino",
+        accessor: "intervino",
+      },
+      {
+        Header: "Valor",
+        accessor: "valor",
+      },
+      {
         Header: "Acciones",
         accessor: "actions",
         Cell: (props) => {
@@ -221,7 +260,14 @@ const TutorialsList = (props) => {
     ],
     []
   );
-
+  const defaultColumn = React.useMemo(
+    () => ({
+      minWidth: 30,
+      width: 150,
+      maxWidth: 400,
+    }),
+    []
+  )
   const {
     getTableProps,
     getTableBodyProps,
@@ -230,20 +276,57 @@ const TutorialsList = (props) => {
     getToggleHideAllColumnsProps,
     rows,
     prepareRow,
+    setHiddenColumns,
+    resetResizing,
   } = useTable({
     columns,
     data: tutorials,
-  });
+    defaultColumn,
+    initialState:{
+      hiddenColumns:["fecha",
+      "direccion",
+      "codigoPostal",
+      "localidad",
+      "provincia",
+      "descripcion",
+      "agente",
+      "actoResolutorio",
+      "fechaResolucion",
+      "leyOrdenanza",
+      "articulo",
+      "inciso",
+      "comentario",
+      "intervino",
+      "valor",
+    ]
+    }
+  },
+  useBlockLayout,
+  useResizeColumns
+  );
 
   return (
     <Styles>
     <div className="list row">
-      <div className="col-md-8">
+
+      <div className="col-md-6 ">
+      <select className=" form-select-lg mb-3 " style={{width:"100%",height:"38px"}}  onClick={handleBuscar}>
+        <option selected>Selecciona por que item vas a buscar  </option>
+        {busqueda.map((search, i) => {
+          return(
+            <option key={i} value={search.accessor}>{search.Header}</option>
+          )
+          
+        })
+        }
+      </select>
+      </div>
+      <div className="col-md-6">
         <div className="input-group mb-3">
           <input
             type="text"
             className="form-control"
-            placeholder="Search by title"
+            placeholder={"Buscar por "+buscar}
             value={searchTitle}
             onChange={onChangeSearchTitle}
           />
@@ -261,7 +344,7 @@ const TutorialsList = (props) => {
 
       <div className="col-md-12 list">
         <div className="mt-3">
-          {"Items per Page: "}
+          {"Items por Pagina: "}
           <select onChange={handlePageSizeChange} value={pageSize}>
             {pageSizes.map((size) => (
               <option key={size} value={size}>
@@ -282,61 +365,69 @@ const TutorialsList = (props) => {
           />
         </div>
         <div>
-        <div>
+        {/*<div>
           <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> 
           Todas las Columnas
-        </div > 
+        </div > */}
         <div className="row">
         {allColumns.map(column => (
           
-          <div key={column.id} className="col-md-4">
+          <div key={column.id} className="col-md-2">
             <label>
               <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
-              {column.id}
+              {column.Header}
+              
             </label>
          
           </div>
         ))}
          </div>
         <br />
-      </div>    
-        <table
-          className="table table-striped table-bordered"
-          {...getTableProps()}
-        >
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
+      </div>  
+     
+     
+        <div {...getTableProps()} className="table ">
+          <div>
+            {headerGroups.map(headerGroup => (
+              <div {...headerGroup.getHeaderGroupProps()} className="tr">
+                {headerGroup.headers.map(column => (
+                  <div {...column.getHeaderProps()} className="th">
+                    {column.render('Header')}
+                    {/* Use column.getResizerProps to hook up the events correctly */}
+                    <div
+                      {...column.getResizerProps()}
+                      className={`resizer ${
+                        column.isResizing ? 'isResizing' : ''
+                      }`}
+                    />
+                  </div>
                 ))}
-              </tr>
+              </div>
             ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
+          </div>
+
+          <div {...getTableBodyProps()}>
             {rows.map((row, i) => {
-              prepareRow(row);
+              prepareRow(row)
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
+                <div {...row.getRowProps()} className="tr">
+                  {row.cells.map(cell => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
+                      <div {...cell.getCellProps()} className="td">
+                        {cell.render('Cell')}
+                      </div>
+                    )
                   })}
-                </tr>
-              );
+                </div>
+              )
             })}
-          </tbody>
-        </table>
+          </div>
+        </div>
+      
+     
       </div>
 
-      <div className="col-md-8">
-        <button className="btn btn-sm btn-danger" onClick={removeAllTutorials}>
-          Remove All
-        </button>
-      </div>
+      
     </div>
     </Styles>
   );
