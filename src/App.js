@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "./App.css";
-
+import Nuevo from "./components/Nuevo";
 import AddTutorial from "./components/AddTutorial";
 import Tutorial from "./components/Tutorial";
 import TutorialsList from "./components/TutorialsList";
@@ -33,12 +33,12 @@ function App() {
       <div className="container mt-3">
         <Switch>
           <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-          <Route exact path="/add" component={AddTutorial} />
+          <Route exact path="/add" component={Nuevo} />
           <Route path="/tutorials/:id" component={Update} />
         </Switch>
       </div>
     </div>
-  );
+  );                
 }
 
 export default App;
