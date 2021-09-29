@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
 
+
 const Tutorial = props => {
   const initialTutorialState = {
     id: null,
@@ -309,7 +310,7 @@ const Tutorial = props => {
                     <div className="form-group">
                     <label htmlFor="fechaResolucion"> Fecha Resolucion</label>
                     <input
-                        type="text"
+                        type="date"
                         className="form-control"
                         id="fechaResolucion"
                         name="fechaResolucion"
@@ -318,19 +319,7 @@ const Tutorial = props => {
                     />
                 </div>
                 </div>
-                <div className="col-md-6">
-                    <div className="form-group">
-                    <label htmlFor="fechaResolucion"> Fecha Resolucion</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="fechaResolucion"
-                        name="fechaResolucion"
-                        value={currentTutorial.fechaResolucion}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                </div>
+                
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="leyOrdenanza"> Ley/Ordenanza</label>

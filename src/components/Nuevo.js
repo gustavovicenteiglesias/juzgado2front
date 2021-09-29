@@ -28,7 +28,7 @@ const AddTutorial = () => {
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
   const [submitted, setSubmitted] = useState(false);
-
+  const [isSubmitting, setSubmitting] = useState(false);
   const handleInputChange = event => {
     const { name, value } = event.target;
     setTutorial({ ...tutorial, [name]: value });
@@ -85,7 +85,9 @@ const AddTutorial = () => {
             valor:response.data.valor
         });
         setSubmitted(true);
+        setSubmitting(true)
         console.log(response.data);
+        
       })
       .catch(e => {
         console.log(e);
@@ -95,24 +97,27 @@ const AddTutorial = () => {
   const newTutorial = () => {
     setTutorial(initialTutorialState);
     setSubmitted(false);
+    setSubmitting(false)
   };
 
   return (
     <div >
     {submitted ? (
       <div>
-        <h4>You submitted successfully!</h4>
+        <h4>Se agrego satisfactoriamente!</h4>
         <button className="btn btn-success" onClick={newTutorial}>
           Add
         </button>
       </div>
     ) : (
       <div>
+          <form onSubmit={saveTutorial}>
           <div className="row">
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="acta">Acta</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="acta"
@@ -126,6 +131,7 @@ const AddTutorial = () => {
                 <div className="form-group">
                 <label htmlFor="fecha">Fecha</label>
                 <input
+                    required
                     type="date"
                     className="form-control"
                     id="fecha"
@@ -139,6 +145,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="nombre">Nombre</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="nombre"
@@ -152,6 +159,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="direccion">Direccion</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="direccion"
@@ -165,6 +173,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="codigoPostal">Codigo Postal</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="codigoPostal"
@@ -178,6 +187,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="localidad">Localidad</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="localidad"
@@ -191,6 +201,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="provincia">Provincia</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="provincia"
@@ -204,6 +215,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="dni"> CUIT o DNI</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="dni"
@@ -217,6 +229,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="descripcion"> Descripcion</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="descripcion"
@@ -230,6 +243,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="lugar">  Lugar Infraccion</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="lugar"
@@ -243,6 +257,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="vehiculo">Vehiculo</label>
                     <input
+                        required
                         type="text"
                         className="form-control"
                         id="vehiculo"
@@ -256,6 +271,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="dominio">Dominio</label>
                     <input
+                    required
                         type="text"
                         className="form-control"
                         id="dominio"
@@ -269,6 +285,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="agente">Agente</label>
                     <input
+                    required
                         type="text"
                         className="form-control"
                         id="agente"
@@ -282,6 +299,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="actoResolutorio">Resolucion</label>
                     <input
+                    required
                         type="text"
                         className="form-control"
                         id="actoResolutorio"
@@ -295,7 +313,8 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="fechaResolucion"> Fecha Resolucion</label>
                     <input
-                        type="text"
+                    
+                        type="date"
                         className="form-control"
                         id="fechaResolucion"
                         name="fechaResolucion"
@@ -309,6 +328,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="leyOrdenanza"> Ley/Ordenanza</label>
                     <input
+                    required
                         type="text"
                         className="form-control"
                         id="leyOrdenanza"
@@ -322,6 +342,7 @@ const AddTutorial = () => {
                     <div className="form-group">
                     <label htmlFor="articulo"> Articulo</label>
                     <input
+                    required
                         type="text"
                         className="form-control"
                         id="articulo"
@@ -387,9 +408,15 @@ const AddTutorial = () => {
 
         
 
-        <button onClick={saveTutorial} className="btn btn-success">
-          Submit
-        </button>
+            <button
+            type="submit"
+            disabled={isSubmitting}
+            style={{width:"100%", background: "rgba(153, 198, 187, 0.89)"}}
+            onClick={saveTutorial}
+          >
+           {isSubmitting ? 'Enviando' : 'Añadir Nuevo'}
+          </button>
+        </form>
       </div>
     )}
   </div>

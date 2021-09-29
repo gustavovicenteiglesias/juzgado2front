@@ -2,8 +2,10 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import Pagination from "@material-ui/lab/Pagination";
 import TutorialDataService from "../services/TutorialService";
 import { useTable, useBlockLayout, useResizeColumns  } from "react-table";
-
+import swal from 'sweetalert';
 import { Styles } from "./style";
+
+//import 'sweetalert/dist/sweetalert.css';
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -26,6 +28,7 @@ const TutorialsList = (props) => {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
+  
 
   const pageSizes = [5,10,15];
 
@@ -102,10 +105,22 @@ const TutorialsList = (props) => {
   };
 
   const deleteTutorial = (rowIndex) => {
-    const id = tutorialsRef.current[rowIndex].id;
+    swal({
+      title: "Estas seguro?",
+      text: "Una vez eliminado, ¡no podrá recuperar este archivo !",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        const id = tutorialsRef.current[rowIndex].id;
 
     TutorialDataService.remove(id)
       .then((response) => {
+        swal("¡Tu archivo ha sido eliminado!", {
+          icon: "success",
+        });
         props.history.push("/tutorials");
 
         let newTutorials = [...tutorialsRef.current];
@@ -116,6 +131,12 @@ const TutorialsList = (props) => {
       .catch((e) => {
         console.log(e);
       });
+        
+      } else {
+        swal("Tu archivo  está a salvo!");
+      }
+    });
+    
   };
 
   const handlePageChange = (event, value) => {
@@ -306,6 +327,7 @@ const TutorialsList = (props) => {
   );
 
   return (
+    
     <Styles>
     <div className="list row">
 
@@ -427,9 +449,12 @@ const TutorialsList = (props) => {
      
       </div>
 
+    
       
+    
     </div>
     </Styles>
+    
   );
 };
 
