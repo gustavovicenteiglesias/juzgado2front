@@ -4,7 +4,7 @@ import TutorialDataService from "../services/TutorialService";
 import { useTable, useBlockLayout, useResizeColumns  } from "react-table";
 import swal from 'sweetalert';
 import { Styles } from "./style";
-
+import AuthService from "../services/auth.service";
 //import 'sweetalert/dist/sweetalert.css';
 
 const IndeterminateCheckbox = React.forwardRef(
@@ -28,13 +28,31 @@ const TutorialsList = (props) => {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageSize, setPageSize] = useState(5);
-  
+  const[showModeratorBoard,setShowModeratorBoard]=useState(false);
+  const[showAdminBoard,setShowAdminBoard]=useState(false);
+  const[showUserBoard,setShowUserBoard]=useState(false);
+  const[currentUser,setCurrentUser]=useState(undefined)
+ 
 
+
+  useEffect(() => {
+    const user= AuthService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user);
+      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+      setShowModeratorBoard(user.roles.includes("ROLE_ADMIN"));
+     
+    }
+  }, []);
+  console.log(showAdminBoard)
+  console.log(AuthService.getCurrentUser())
+  console.log("currentUser",currentUser)
   const pageSizes = [5,10,15];
 
   tutorialsRef.current = tutorials;
 
   const onChangeSearchTitle = (e) => {
+    if (e.key==="Enter") findByTitle()
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
   };
@@ -78,20 +96,9 @@ const TutorialsList = (props) => {
 
   useEffect(retrieveTutorials, [page, pageSize]);
 
-  const refreshList = () => {
-    retrieveTutorials();
-  };
+ 
 
-  const removeAllTutorials = () => {
-    TutorialDataService.removeAll()
-      .then((response) => {
-        console.log(response.data);
-        refreshList();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+  
 
   const findByTitle = () => {
     setPage(1);
@@ -105,6 +112,7 @@ const TutorialsList = (props) => {
   };
 
   const deleteTutorial = (rowIndex) => {
+   
     swal({
       title: "Estas seguro?",
       text: "Una vez eliminado, ¡no podrá recuperar este archivo !",
@@ -260,26 +268,30 @@ const TutorialsList = (props) => {
         Header: "Valor",
         accessor: "valor",
       },
+     
       {
+        
         Header: "Acciones",
         accessor: "actions",
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
+           
             <div>
-              <span onClick={() => openTutorial(rowIdx)}>
-                <i className="far fa-edit action mr-2"></i>
-              </span>
+            { showAdminBoard && <span onClick={() => openTutorial(rowIdx)}>
+               <i className="far fa-edit action mr-2"></i>
+              </span>}
 
-              <span onClick={() => deleteTutorial(rowIdx)}>
-                <i className="fas fa-trash action"></i>
-              </span>
+             { showAdminBoard &&  <span onClick={() => deleteTutorial(rowIdx)}>
+             <i className="fas fa-trash action"></i>
+              </span> }
             </div>
+
           );
         },
       },
     ],
-    []
+    [showAdminBoard]
   );
   const defaultColumn = React.useMemo(
     () => ({

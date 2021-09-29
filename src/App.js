@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "./App.css";
+import Home from "./services/home.component";
 import Nuevo from "./components/Nuevo";
 import AuthService from "./services/auth.service";
 import TutorialsList from "./components/TutorialsList";
@@ -25,28 +26,29 @@ function App() {
     if (user) {
       setCurrentUser(user);
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
-      setShowModeratorBoard(user.roles.includes("ROLE_ADMIN"));
+      setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
+      setShowUserBoard(user.roles.includes("ROLE_USER"));
      
     }
   }, []);
   const logOut=()=> {
     AuthService.logout();
-    history.push("/tutorials")
+    history.push("/")
    window.location.reload()
   }
   return (
     <div>
 
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <a href="/tutorials" className="navbar-brand">
+        <a href="/" className="navbar-brand">
           Juzgado II
         </a>
         <div className="navbar-nav mr-auto">
-          <li className="nav-item">
+        {(showModeratorBoard || showAdminBoard) &&<li className="nav-item">
             <Link to={"/tutorials"} className="nav-link">
               Infracciones
             </Link>
-          </li>
+          </li>}
 
           {showAdminBoard &&<li className="nav-item">
             <Link to={"/add"} className="nav-link">
@@ -64,7 +66,7 @@ function App() {
                 </Link>
                 </li>
                 <li className="nav-item">
-                <Link to={"/login"} className="nav-link" onClick={logOut} >
+                <Link to={"/"} className="nav-link" onClick={logOut} >
                 Cerrar sesión
                 </Link>
                 </li>
@@ -89,9 +91,10 @@ function App() {
         </nav>
       <div className="container mt-3">
         <Switch>
-          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-          <Route exact path="/add" component={Nuevo} />
-          <Route path="/tutorials/:id" component={Update} />
+          <Route exact path={["/"]} component={Home} />
+          <Route exact path={["/tutorials"]} component={showModeratorBoard||showAdminBoard? TutorialsList: Home} />
+          <Route exact path="/add" component={showAdminBoard? Nuevo : TutorialsList} />
+          <Route path="/tutorials/:id" component={showAdminBoard?Update  : TutorialsList} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/profile" component={Profile} />

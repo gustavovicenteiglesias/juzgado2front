@@ -2,7 +2,11 @@ import http from "./http-common";
 import authHeader from './auth-header';
 
 const getAll = (params) => {
-  return http.get("/infraciones",{ headers: authHeader() }, { params } );
+  let config = {
+    headers:authHeader() ,
+    params
+  }
+  return http.get("/infraciones",config );
 };
 
 const get = (id) => {
@@ -26,7 +30,7 @@ const removeAll = () => {
 };
 
 const findByTitle = (title) => {
-  return http.get(`/tutorials?title=${title}`);
+  return http.get(`/tutorials?title=${title}`,{ headers: authHeader() });
 };
 
 const TutorialService = {
