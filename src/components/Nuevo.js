@@ -27,7 +27,7 @@ const AddTutorial = () => {
     valor:""
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
-  const [submitted, setSubmitted] = useState(false);
+ 
   const [isSubmitting, setSubmitting] = useState(false);
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -84,7 +84,7 @@ const AddTutorial = () => {
             intervino:response.data.intervino,
             valor:response.data.valor
         });
-        setSubmitted(true);
+        
         setSubmitting(true)
         console.log(response.data);
         
@@ -94,24 +94,13 @@ const AddTutorial = () => {
       });
   };
 
-  const newTutorial = () => {
-    setTutorial(initialTutorialState);
-    setSubmitted(false);
-    setSubmitting(false)
-  };
+  
 
   return (
-    <div >
-    {submitted ? (
+    
+   
       <div>
-        <h4>Se agrego satisfactoriamente!</h4>
-        <button className="btn btn-success" onClick={newTutorial}>
-          Add
-        </button>
-      </div>
-    ) : (
-      <div>
-          <form onSubmit={saveTutorial}>
+          <form >
           <div className="row">
                 <div className="col-md-6">
                     <div className="form-group">
@@ -418,8 +407,8 @@ const AddTutorial = () => {
           </button>
         </form>
       </div>
-    )}
-  </div>
+    
+ 
 );
 };
 
