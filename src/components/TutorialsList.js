@@ -214,6 +214,31 @@ const TutorialsList = (props) => {
         Header: "CUIT o DNI",
         accessor: "dni",
       },
+      
+      {
+        Header: "Nombre Titular",
+        accessor: "nombre_titular",
+      },
+      {
+        Header: "Direccion Titular",
+        accessor: "direccion_titular",
+      },
+      {
+        Header: "Codigo Postal Titular",
+        accessor: "cp_titular",
+      },
+      {
+        Header: "Localidad Titular",
+        accessor: "localidad_titular",
+      },
+      {
+        Header: "Provincia Titular",
+        accessor: "provincia_titular",
+      },
+      {
+        Header: "CUIT o DNI Titular",
+        accessor: "dni_titular",
+      },
       {
         Header: "Descripcion",
         accessor: "descripcion",
