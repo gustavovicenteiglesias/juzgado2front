@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://areco.gob.ar:9531/api/auth/"//"http://areco.gob.ar:9528/api/auth/";
+const API_URL = "http://localhost:9531/api/auth/"//"http://areco.gob.ar:9528/api/auth/";
 
 class AuthService {
   login(username, password) {
@@ -11,6 +11,7 @@ class AuthService {
       })
       .then(response => {
         if (response.data.accessToken) {
+          console.log(response.data.accessToken)
           localStorage.setItem("user", JSON.stringify(response.data));
         }
 

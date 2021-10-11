@@ -24,7 +24,14 @@ const AddTutorial = () => {
     inciso:"",
     comentario:"",
     intervino:"",
-    valor:""
+    valor:"",
+    unidadValor:0.00,
+    nombreTitular:"",
+    direccionTitular:"",
+    cpTitular:"",
+    localidadTitular:"",
+    provinciaTitular:"",
+    dniTitular:"",
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
  
@@ -56,7 +63,14 @@ const AddTutorial = () => {
         inciso:tutorial.inciso,
         comentario:tutorial.comentario,
         intervino:tutorial.intervino,
-        valor:tutorial.valor
+        valor:tutorial.valor,
+        unidadValor:tutorial.unidadValor,
+        nombreTitular:tutorial.nombreTitular,
+        direccionTitular:tutorial.direccionTitular,
+        cpTitular:tutorial.cpTitular,
+        localidadTitular:tutorial.localidadTitular,
+        provinciaTitular:tutorial.provinciaTitular,
+        dniTitular:tutorial.dniTitular,
     };
 
     TutorialDataService.create(data)
@@ -82,7 +96,13 @@ const AddTutorial = () => {
             inciso:response.data.inciso,
             comentario:response.data.comentario,
             intervino:response.data.intervino,
-            valor:response.data.valor
+            valor:response.data.valor,
+            nombreTitular:response.data.nombreTitular,
+            direccionTitular:response.data.direccionTitular,
+            cpTitular:response.data.cpTitular,
+            localidadTitular:response.data.localidadTitular,
+            provinciaTitular:response.data.provinciaTitular,
+            dniTitular:response.data.dniTitular,
         });
         
         setSubmitting(true)
@@ -100,7 +120,7 @@ const AddTutorial = () => {
     
    
       <div>
-          <form >
+          <form onSubmit={saveTutorial}>
           <div className="row">
                 <div className="col-md-6">
                     <div className="form-group">
@@ -214,6 +234,92 @@ const AddTutorial = () => {
                     />
                 </div>
                 </div>
+    {/*Titular*/ }
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="nombre">Nombre Titular</label>
+                    <input
+                        
+                        type="text"
+                        className="form-control"
+                        id="nombreTitular"
+                        name="nombreTitular"
+                        value={tutorial.nombreTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="direccion">Direccion Titular</label>
+                    <input
+                        
+                        type="text"
+                        className="form-control"
+                        id="direccionTitular"
+                        name="direccionTitular"
+                        value={tutorial.direccionTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="codigoPostal">Codigo Postal Titulat</label>
+                    <input
+                        
+                        type="text"
+                        className="form-control"
+                        id="cpTitular"
+                        name="cpTitular"
+                        value={tutorial.cpTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="localidad">Localidad Titular</label>
+                    <input
+                      
+                        type="text"
+                        className="form-control"
+                        id="localidadTitular"
+                        name="localidadTitular"
+                        value={tutorial.localidadTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="provincia">Provincia Titular</label>
+                    <input
+                        
+                        type="text"
+                        className="form-control"
+                        id="provinciaTitular"
+                        name="provinciaTitular"
+                        value={tutorial.provinciaTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="dni"> CUIT o DNI Titular</label>
+                    <input
+                        
+                        type="text"
+                        className="form-control"
+                        id="dniTitular"
+                        name="dniTitular"
+                        value={tutorial.dniTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                {/*Titular*/ }
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="descripcion"> Descripcion</label>
@@ -401,7 +507,7 @@ const AddTutorial = () => {
             type="submit"
             disabled={isSubmitting}
             style={{width:"100%", background: "rgba(153, 198, 187, 0.89)"}}
-            onClick={saveTutorial}
+           
           >
            {isSubmitting ? 'Enviando' : 'Añadir Nuevo'}
           </button>

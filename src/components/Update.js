@@ -25,7 +25,14 @@ const Tutorial = props => {
     inciso:"",
     comentario:"",
     intervino:"",
-    valor:""
+    unidadValor:0.00,
+    valor:"",
+    nombreTitular:"",
+    direccionTitular:"",
+    cpTitular:"",
+    localidadTitular:"",
+    provinciaTitular:"",
+    dniTitular:"",
 
   };
   const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
@@ -228,6 +235,86 @@ const Tutorial = props => {
                     />
                 </div>
                 </div>
+                {/*Titular */}
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="nombre">Nombre Titulo</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="nombreTitular"
+                        name="nombreTitular"
+                        value={currentTutorial.nombreTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="direccion">Direccion Titular</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="direccionTitular"
+                        name="direccionTitular"
+                        value={currentTutorial.direccionTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="codigoPostal">Codigo Postal Titular</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="cpTitular"
+                        name="cpTitular"
+                        value={currentTutorial.cpTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="localidad">Localidad Titular</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="localidadTitular"
+                        name="localidadTitular"
+                        value={currentTutorial.localidadTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="provincia">Provincia Titular</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="provinciaTitular"
+                        name="provinciaTitular"
+                        value={currentTutorial.provinciaTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="dni"> CUIT o DNI Titular</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="dniTitular"
+                        name="dniTitular"
+                        value={currentTutorial.dniTitular}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                {/*Titular */}
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="descripcion"> Descripcion</label>

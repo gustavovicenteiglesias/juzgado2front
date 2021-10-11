@@ -356,6 +356,12 @@ const TutorialsList = (props) => {
       "comentario",
       "intervino",
       "valor",
+      "nombreTitular",
+      "direccionTitular",
+      "cpTitular",
+      "localidadTitular",
+      "provinciaTitular",
+      "dniTitular",
     ]
     }
   },
