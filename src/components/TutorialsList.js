@@ -5,7 +5,9 @@ import { useTable, useBlockLayout, useResizeColumns  } from "react-table";
 import swal from 'sweetalert';
 import { Styles } from "./style";
 import AuthService from "../services/auth.service";
+import Loader from "react-loader-spinner";
 //import 'sweetalert/dist/sweetalert.css';
+
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -31,7 +33,8 @@ const TutorialsList = (props) => {
   const[showModeratorBoard,setShowModeratorBoard]=useState(false);
   const[showAdminBoard,setShowAdminBoard]=useState(false);
   const[showUserBoard,setShowUserBoard]=useState(false);
-  const[currentUser,setCurrentUser]=useState(undefined)
+  const[currentUser,setCurrentUser]=useState(undefined);
+  const[loading,setLoading]=useState(false);
  
   const API_URL = "http://areco.gob.ar:9531/api/portada/";
 
@@ -78,12 +81,13 @@ const TutorialsList = (props) => {
   };
 
   const retrieveTutorials = () => {
+    setLoading(true);
     const params = getRequestParams(searchTitle,buscar, page, pageSize);
-    console.log(params)
+    console.log(params);
     TutorialDataService.getAll(params)
       .then((response) => {
         const { tutorials, totalPages } = response.data;
-
+        setLoading(false);
         setTutorials(tutorials);
         setCount(totalPages);
 
@@ -91,6 +95,13 @@ const TutorialsList = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        swal(
+           {
+            text:"¡Ups no se podido realizar tu consulta !",
+          icon: 'warning',
+        }).then((result)=>{
+          if(result){window.location.reload()}
+         })
       });
   };
 
@@ -98,9 +109,16 @@ const TutorialsList = (props) => {
 
  
 
-  
+  const findByTitleEnter = (event) => {
+    if (event.key === 'Enter') {
+      setPage(1);
+    retrieveTutorials();
+    }
+    
+  };
 
   const findByTitle = () => {
+    
     setPage(1);
     retrieveTutorials();
   };
@@ -396,7 +414,7 @@ const TutorialsList = (props) => {
   return (
     
     <Styles>
-    <div className="list row">
+         <div className="list row">
 
       <div className="col-md-6 ">
       <select className=" form-select-lg mb-3 " style={{width:"100%",height:"38px"}}  onClick={handleBuscar}>
@@ -417,6 +435,7 @@ const TutorialsList = (props) => {
             className="form-control"
             placeholder={"Buscar por "+buscar}
             value={searchTitle}
+            onKeyDown={findByTitleEnter}
             onChange={onChangeSearchTitle}
           />
           <div className="input-group-append">
@@ -495,7 +514,16 @@ const TutorialsList = (props) => {
             ))}
           </div>
 
-          <div {...getTableBodyProps()}>
+         { loading?(
+             <Loader
+             type="Watch"
+             color="#00BFFF"
+             height={100}
+             width={100}
+             
+           />
+          ):
+          (<div {...getTableBodyProps()}>
             {rows.map((row, i) => {
               prepareRow(row)
               return (
@@ -510,7 +538,7 @@ const TutorialsList = (props) => {
                 </div>
               )
             })}
-          </div>
+          </div>)}
         </div>
       
      
