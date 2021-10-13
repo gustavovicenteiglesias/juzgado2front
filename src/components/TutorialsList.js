@@ -33,7 +33,7 @@ const TutorialsList = (props) => {
   const[showUserBoard,setShowUserBoard]=useState(false);
   const[currentUser,setCurrentUser]=useState(undefined)
  
-
+  const API_URL = "http://areco.gob.ar:9531/api/portada/";
 
   useEffect(() => {
     const user= AuthService.getCurrentUser();
@@ -160,6 +160,11 @@ const TutorialsList = (props) => {
   };
   const busqueda=[
     {
+      Header: "Causa",
+      accessor: "causa",
+    }
+     ,
+    {
       Header: "Nombre",
       accessor: "nombre",
     },
@@ -178,9 +183,15 @@ const TutorialsList = (props) => {
     },
 
 
+
   ]
   const columns = useMemo(
     () => [
+      {
+        Header: "Nro Causa",
+        accessor: "causa",
+        
+      },
       {
         Header: "Nro Acta",
         accessor: "acta",
@@ -303,6 +314,12 @@ const TutorialsList = (props) => {
           return (
            
             <div>
+            { showAdminBoard && <span>
+                  <a  href={API_URL+tutorialsRef.current[rowIdx].id} target="_blank" rel="noreferrer" style={{color:"red"}}>
+                  <i class="far fa-file-alt mr-2"></i>
+                  </a>
+                    </span>
+        }
             { showAdminBoard && <span onClick={() => openTutorial(rowIdx)}>
                <i className="far fa-edit action mr-2"></i>
               </span>}
@@ -310,6 +327,13 @@ const TutorialsList = (props) => {
              { showAdminBoard &&  <span onClick={() => deleteTutorial(rowIdx)}>
              <i className="fas fa-trash action"></i>
               </span> }
+
+         
+         
+         
+         
+         
+              
             </div>
 
           );
