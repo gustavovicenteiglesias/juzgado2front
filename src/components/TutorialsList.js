@@ -6,21 +6,11 @@ import swal from 'sweetalert';
 import { Styles } from "./style";
 import AuthService from "../services/auth.service";
 import Loader from "react-loader-spinner";
-//import 'sweetalert/dist/sweetalert.css';
+import ReactTooltip from "react-tooltip";
 
 
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef()
-    const resolvedRef = ref || defaultRef
 
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
 
-    return <input type="checkbox" ref={resolvedRef} {...rest} />
-  }
-)
 
 const TutorialsList = (props) => {
   const [tutorials, setTutorials] = useState([]);
@@ -32,11 +22,11 @@ const TutorialsList = (props) => {
   const [pageSize, setPageSize] = useState(5);
   const[showModeratorBoard,setShowModeratorBoard]=useState(false);
   const[showAdminBoard,setShowAdminBoard]=useState(false);
-  const[showUserBoard,setShowUserBoard]=useState(false);
+  //const[showUserBoard,setShowUserBoard]=useState(false);
   const[currentUser,setCurrentUser]=useState(undefined);
   const[loading,setLoading]=useState(false);
  
-  const API_URL = "http://areco.gob.ar:9531/api/portada/";
+  
 
   useEffect(() => {
     const user= AuthService.getCurrentUser();
@@ -47,9 +37,9 @@ const TutorialsList = (props) => {
      
     }
   }, []);
-  console.log(showAdminBoard)
+  /*console.log(showAdminBoard)
   console.log(AuthService.getCurrentUser())
-  console.log("currentUser",currentUser)
+  console.log("currentUser",currentUser)*/
   const pageSizes = [5,10,15];
 
   tutorialsRef.current = tutorials;
@@ -83,7 +73,7 @@ const TutorialsList = (props) => {
   const retrieveTutorials = () => {
     setLoading(true);
     const params = getRequestParams(searchTitle,buscar, page, pageSize);
-    console.log(params);
+    //console.log(params);
     TutorialDataService.getAll(params)
       .then((response) => {
         const { tutorials, totalPages } = response.data;
@@ -91,10 +81,10 @@ const TutorialsList = (props) => {
         setTutorials(tutorials);
         setCount(totalPages);
 
-        console.log("recibido",response.data);
+        //console.log("recibido",response.data);
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
         swal(
            {
             text:"¡Ups no se podido realizar tu consulta !",
@@ -107,7 +97,28 @@ const TutorialsList = (props) => {
 
   useEffect(retrieveTutorials, [page, pageSize]);
 
- 
+  const oficiopdf=(rowIndex)=>{
+    const id = tutorialsRef.current[rowIndex].id;
+    TutorialDataService.oficiopdf(id);
+   
+  }
+
+  const cedulapdf=(rowIndex)=>{
+    const id = tutorialsRef.current[rowIndex].id;
+    TutorialDataService.cedulapdf(id);
+   
+  }
+
+  const cedulatitularpdf=(rowIndex)=>{
+    const id = tutorialsRef.current[rowIndex].id;
+    TutorialDataService.cedulatitularpdf(id);
+   
+  }
+  const portadapdf=(rowIndex)=>{
+    const id = tutorialsRef.current[rowIndex].id;
+    TutorialDataService.portadapdf(id);
+   
+  }
 
   const findByTitleEnter = (event) => {
     if (event.key === 'Enter') {
@@ -155,7 +166,7 @@ const TutorialsList = (props) => {
         setTutorials(newTutorials);
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
       });
         
       } else {
@@ -169,7 +180,7 @@ const TutorialsList = (props) => {
     setPage(value);
   };
   const handleBuscar=(event)=>{
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setBuscar(event.target.value)
   }
   const handlePageSizeChange = (event) => {
@@ -208,12 +219,13 @@ const TutorialsList = (props) => {
       {
         Header: "Nro Causa",
         accessor: "causa",
+        width:100
         
       },
       {
         Header: "Nro Acta",
         accessor: "acta",
-        
+        width:100
       },
       {
         Header: "Fecha",
@@ -327,28 +339,55 @@ const TutorialsList = (props) => {
         
         Header: "Acciones",
         accessor: "actions",
+        width:180,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
            
             <div>
-            { showAdminBoard && <span>
-                  <a  href={API_URL+tutorialsRef.current[rowIdx].id} target="_blank" rel="noreferrer" style={{color:"red"}}>
-                  <i class="far fa-file-alt mr-2"></i>
-                  </a>
-                    </span>
+                { showAdminBoard && <span style={{color:"blue"}} onClick={() => oficiopdf(rowIdx)} data-tip data-for="oficioPdf" >
+              <i className="fas fa-balance-scale action mr-2" ></i>
+                  </span>
+                  
         }
-            { showAdminBoard && <span onClick={() => openTutorial(rowIdx)}>
+                 { showAdminBoard && <span style={{color:"red"}} onClick={() => cedulatitularpdf(rowIdx)} data-tip data-for="cedulaTitular" >
+              <i className="far fa-envelope action mr-2" ></i>
+                  </span>
+                  
+        }
+             { showAdminBoard && <span onClick={() => cedulapdf(rowIdx)} data-tip data-for="cedula">
+              <i className="far fa-envelope action mr-2"></i>
+                  </span>
+        }
+            { showAdminBoard && <span onClick={() => portadapdf(rowIdx)} data-tip data-for="portada">
+              <i className="far fa-file-alt action mr-2"></i>
+                  </span>
+        }
+            { showAdminBoard && <span onClick={() => openTutorial(rowIdx)} data-tip data-for="editar">
                <i className="far fa-edit action mr-2"></i>
               </span>}
 
-             { showAdminBoard &&  <span onClick={() => deleteTutorial(rowIdx)}>
+             { showAdminBoard &&  <span onClick={() => deleteTutorial(rowIdx)} data-tip data-for="borrar">
              <i className="fas fa-trash action"></i>
               </span> }
-
-         
-         
-         
+              <ReactTooltip id="oficioPdf" place="top" effect="solid">
+                Oficio
+              </ReactTooltip>
+              <ReactTooltip id="cedulaTitular" place="top" effect="solid">
+                Cedula titular
+              </ReactTooltip>
+              <ReactTooltip id="cedula" place="top" effect="solid">
+                Cedula 
+              </ReactTooltip>
+              <ReactTooltip id="portada" place="top" effect="solid">
+                Portada
+              </ReactTooltip>
+              <ReactTooltip id="editar" place="top" effect="solid">
+                Editar 
+              </ReactTooltip>
+              <ReactTooltip id="borrar" place="top" effect="solid">
+                Borrar
+              </ReactTooltip>
          
          
               
@@ -404,6 +443,7 @@ const TutorialsList = (props) => {
       "localidadTitular",
       "provinciaTitular",
       "dniTitular",
+      "lugar"
     ]
     }
   },
@@ -473,10 +513,7 @@ const TutorialsList = (props) => {
           />
         </div>
         <div>
-        {/*<div>
-          <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> 
-          Todas las Columnas
-        </div > */}
+       
         <div className="row">
         {allColumns.map(column => (
           
