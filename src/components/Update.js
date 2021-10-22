@@ -16,6 +16,8 @@ const Tutorial = props => {
     descripcion:"",
     lugar:"",
     vehiculo:"",
+    motor:"",
+    chasis:"",
     dominio:"",
     agente:"",
     actoResolutorio:"",
@@ -350,6 +352,32 @@ const Tutorial = props => {
                         id="vehiculo"
                         name="vehiculo"
                         value={currentTutorial.vehiculo}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="motor">Motor</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="motor"
+                        name="motor"
+                        value={currentTutorial.motor}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="chasis">Chasis</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="chasis"
+                        name="chasis"
+                        value={currentTutorial.chasis}
                         onChange={handleInputChange}
                     />
                 </div>

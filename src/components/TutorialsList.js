@@ -295,6 +295,14 @@ const TutorialsList = (props) => {
         accessor: "vehiculo",
       },
       {
+        Header: "Motor",
+        accessor: "motor",
+      },
+      {
+        Header: "Chasis",
+        accessor: "chasis",
+      },
+      {
         Header: "Dominio",
         accessor: "dominio",
       },
@@ -443,7 +451,10 @@ const TutorialsList = (props) => {
       "localidadTitular",
       "provinciaTitular",
       "dniTitular",
-      "lugar"
+      "lugar",
+      "motor",
+      
+      "chasis"
     ]
     }
   },

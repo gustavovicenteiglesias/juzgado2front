@@ -32,6 +32,8 @@ const AddTutorial = () => {
     localidadTitular:"",
     provinciaTitular:"",
     dniTitular:"",
+    motor:"",
+    chasis:""
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
  
@@ -71,6 +73,9 @@ const AddTutorial = () => {
         localidadTitular:tutorial.localidadTitular,
         provinciaTitular:tutorial.provinciaTitular,
         dniTitular:tutorial.dniTitular,
+        chasis:tutorial.chasis,
+        motor:tutorial.motor
+
     };
 
     TutorialDataService.create(data)
@@ -103,6 +108,8 @@ const AddTutorial = () => {
             localidadTitular:response.data.localidadTitular,
             provinciaTitular:response.data.provinciaTitular,
             dniTitular:response.data.dniTitular,
+            chasis:response.data.chasis,
+            motor:response.data.motor
         });
         
         setSubmitting(true)
@@ -358,6 +365,34 @@ const AddTutorial = () => {
                         id="vehiculo"
                         name="vehiculo"
                         value={tutorial.vehiculo}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="motor">Motor</label>
+                    <input
+                        required
+                        type="text"
+                        className="form-control"
+                        id="motor"
+                        name="motor"
+                        value={tutorial.motor}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label htmlFor="chasis">Chasis</label>
+                    <input
+                        required
+                        type="text"
+                        className="form-control"
+                        id="chasis"
+                        name="chasis"
+                        value={tutorial.chasis}
                         onChange={handleInputChange}
                     />
                 </div>
