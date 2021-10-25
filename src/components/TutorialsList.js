@@ -359,7 +359,8 @@ const TutorialsList = (props) => {
            
             <div>
                { showAdminBoard && <span style={{color:"green"}} onClick={() => recibopdf(rowIdx)} data-tip data-for="recibo">
-              <i className="far fa-envelope action mr-2"></i>
+              <i className="fas fa-file-invoice-dollar action mr-2"></i>
+
                   </span>
         }
                 { showAdminBoard && <span style={{color:"blue"}} onClick={() => oficiopdf(rowIdx)} data-tip data-for="oficioPdf" >
