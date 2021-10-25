@@ -28,6 +28,25 @@ const cedulapdf=async (id)=>{
   }
 }
 
+const recibopdf=async (id)=>{
+  try {
+    const response = await http.get(`/recibo/${id}`, {
+      headers: authHeader(),
+      responseType: 'blob'
+    });
+    //Create a Blob from the PDF Stream
+    const file = new Blob(
+      [response.data],
+      { type: 'application/pdf' });
+    //Build a URL from the file
+    const fileURL = URL.createObjectURL(file);
+    //Open the URL on new Window
+    window.open(fileURL);
+  } catch (error) {
+   // console.log(error);
+  }
+}
+
 const oficiopdf=async (id)=>{
   try {
     const response = await http.get(`/oficio/${id}`, {
@@ -119,7 +138,8 @@ const TutorialService = {
   cedulapdf,
   portadapdf,
   cedulatitularpdf,
-  oficiopdf
+  oficiopdf,
+  recibopdf
 };
 
 export default TutorialService;

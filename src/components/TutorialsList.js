@@ -108,6 +108,11 @@ const TutorialsList = (props) => {
     TutorialDataService.cedulapdf(id);
    
   }
+  const recibopdf=(rowIndex)=>{
+    const id = tutorialsRef.current[rowIndex].id;
+    TutorialDataService.recibopdf(id);
+   
+  }
 
   const cedulatitularpdf=(rowIndex)=>{
     const id = tutorialsRef.current[rowIndex].id;
@@ -353,6 +358,10 @@ const TutorialsList = (props) => {
           return (
            
             <div>
+               { showAdminBoard && <span style={{color:"green"}} onClick={() => recibopdf(rowIdx)} data-tip data-for="recibo">
+              <i className="far fa-envelope action mr-2"></i>
+                  </span>
+        }
                 { showAdminBoard && <span style={{color:"blue"}} onClick={() => oficiopdf(rowIdx)} data-tip data-for="oficioPdf" >
               <i className="fas fa-balance-scale action mr-2" ></i>
                   </span>
@@ -378,6 +387,9 @@ const TutorialsList = (props) => {
              { showAdminBoard &&  <span onClick={() => deleteTutorial(rowIdx)} data-tip data-for="borrar">
              <i className="fas fa-trash action"></i>
               </span> }
+              <ReactTooltip id="recibo" place="top" effect="solid">
+                Recibo
+              </ReactTooltip>
               <ReactTooltip id="oficioPdf" place="top" effect="solid">
                 Oficio
               </ReactTooltip>
