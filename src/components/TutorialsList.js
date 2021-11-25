@@ -7,6 +7,7 @@ import { Styles } from "./style";
 import AuthService from "../services/auth.service";
 import Loader from "react-loader-spinner";
 import ReactTooltip from "react-tooltip";
+import moment from "moment";
 
 
 
@@ -37,8 +38,9 @@ const TutorialsList = (props) => {
      
     }
   }, []);
-  /*console.log(showAdminBoard)
-  console.log(AuthService.getCurrentUser())
+  let fecha=moment().add(2,"months")
+  console.log(fecha.format("DD-MM-YYYY"))
+  /*console.log(AuthService.getCurrentUser())
   console.log("currentUser",currentUser)*/
   const pageSizes = [5,10,15];
 
@@ -143,6 +145,12 @@ const TutorialsList = (props) => {
     const id = tutorialsRef.current[rowIndex].id;
 
     props.history.push("/tutorials/" + id);
+  };
+
+  const openConvenio= (rowIndex) => {
+    const id = tutorialsRef.current[rowIndex].id;
+
+    props.history.push("/convenio/" + id);
   };
 
   const deleteTutorial = (rowIndex) => {
@@ -352,12 +360,15 @@ const TutorialsList = (props) => {
         
         Header: "Acciones",
         accessor: "actions",
-        width:180,
+        width:210,
         Cell: (props) => {
           const rowIdx = props.row.id;
           return (
            
             <div>
+              { showAdminBoard && <span onClick={() => openConvenio(rowIdx)} data-tip data-for="convenio">
+              <i class="fas fa-handshake action mr-2"></i>
+              </span>}
                { showAdminBoard && <span style={{color:"green"}} onClick={() => recibopdf(rowIdx)} data-tip data-for="recibo">
               <i className="fas fa-file-invoice-dollar action mr-2"></i>
 
@@ -388,6 +399,9 @@ const TutorialsList = (props) => {
              { showAdminBoard &&  <span onClick={() => deleteTutorial(rowIdx)} data-tip data-for="borrar">
              <i className="fas fa-trash action"></i>
               </span> }
+              <ReactTooltip id="convenio" place="top" effect="solid">
+                Convenio
+              </ReactTooltip>
               <ReactTooltip id="recibo" place="top" effect="solid">
                 Recibo
               </ReactTooltip>

@@ -9,6 +9,25 @@ const getAll = (params) => {
   return http.get("/infraciones",config );
 };
 
+const conveniopdf=async (id)=>{
+  try {
+    const response = await http.get(`/convenio/${id}`, {
+      headers: authHeader(),
+      responseType: 'blob'
+    });
+    //Create a Blob from the PDF Stream
+    const file = new Blob(
+      [response.data],
+      { type: 'application/pdf' });
+    //Build a URL from the file
+    const fileURL = URL.createObjectURL(file);
+    //Open the URL on new Window
+    window.open(fileURL);
+  } catch (error) {
+   // console.log(error);
+  }
+}
+
 const cedulapdf=async (id)=>{
   try {
     const response = await http.get(`/cedula/${id}`, {
@@ -31,6 +50,43 @@ const cedulapdf=async (id)=>{
 const recibopdf=async (id)=>{
   try {
     const response = await http.get(`/recibo/${id}`, {
+      headers: authHeader(),
+      responseType: 'blob'
+    });
+    //Create a Blob from the PDF Stream
+    const file = new Blob(
+      [response.data],
+      { type: 'application/pdf' });
+    //Build a URL from the file
+    const fileURL = URL.createObjectURL(file);
+    //Open the URL on new Window
+    window.open(fileURL);
+  } catch (error) {
+   // console.log(error);
+  }
+}
+
+const recibopdfcuotas=async (id)=>{
+  try {
+    const response = await http.get(`/recibocuotas/${id}`, {
+      headers: authHeader(),
+      responseType: 'blob'
+    });
+    //Create a Blob from the PDF Stream
+    const file = new Blob(
+      [response.data],
+      { type: 'application/pdf' });
+    //Build a URL from the file
+    const fileURL = URL.createObjectURL(file);
+    //Open the URL on new Window
+    window.open(fileURL);
+  } catch (error) {
+   // console.log(error);
+  }
+}
+const recibopdfanticipo=async (id)=>{
+  try {
+    const response = await http.get(`/reciboanticipo/${id}`, {
       headers: authHeader(),
       responseType: 'blob'
     });
@@ -139,7 +195,10 @@ const TutorialService = {
   portadapdf,
   cedulatitularpdf,
   oficiopdf,
-  recibopdf
+  recibopdf,
+  recibopdfcuotas,
+  conveniopdf,
+  recibopdfanticipo
 };
 
 export default TutorialService;

@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import "./App.css";
 import Home from "./services/home.component";
 import Nuevo from "./components/Nuevo";
+import Convenio from "./components/Convenio";
 import AuthService from "./services/auth.service";
 import TutorialsList from "./components/TutorialsList";
 import Update from "./components/Update";
@@ -56,6 +57,7 @@ function App() {
             </Link>
           </li> }
         </div>
+
       
       {currentUser? (
            
@@ -94,6 +96,7 @@ function App() {
           <Route exact path={["/"]} component={Home} />
           <Route exact path={["/tutorials"]} component={showModeratorBoard||showAdminBoard? TutorialsList: Home} />
           <Route exact path="/add" component={showAdminBoard? Nuevo : TutorialsList} />
+          <Route exact path="/convenio/:id" component={showAdminBoard? Convenio : TutorialsList} />
           <Route path="/tutorials/:id" component={showAdminBoard?Update  : TutorialsList} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />

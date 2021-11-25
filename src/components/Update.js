@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
 
@@ -58,6 +59,7 @@ const Tutorial = props => {
 
   const handleInputChange = event => {
     const { name, value } = event.target;
+    console.log(event.target.value)
     setCurrentTutorial({ ...currentTutorial, [name]: value });
   };
 
@@ -125,7 +127,8 @@ const Tutorial = props => {
         console.log(e);
       });
   };
-
+  console.log("fecha",currentTutorial.fecha)
+  console.log(moment().add(2,"months").format("YYYY-MM-DD"))
   return (
     <div>
       {currentTutorial ? (
@@ -154,7 +157,7 @@ const Tutorial = props => {
                     className="form-control"
                     id="fecha"
                     name="fecha"
-                    value={currentTutorial.fecha}
+                    value={currentTutorial.fecha   }
                     onChange={handleInputChange}
                 />
                 </div>
