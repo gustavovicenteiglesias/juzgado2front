@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TutorialDataService from "../services/TutorialService";
+import Agentes from "./Agentes"
 
 const AddTutorial = () => {
   const initialTutorialState = {
@@ -38,6 +39,11 @@ const AddTutorial = () => {
   const [tutorial, setTutorial] = useState(initialTutorialState);
  
   const [isSubmitting, setSubmitting] = useState(false);
+  
+  const handleInputChangeAgente=event=>{
+    console.log(event.target.value)
+    setTutorial({ ...tutorial, agente: event.target.value });
+  }
   const handleInputChange = event => {
     const { name, value } = event.target;
     setTutorial({ ...tutorial, [name]: value });
@@ -414,7 +420,17 @@ const AddTutorial = () => {
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="agente">Agente</label>
-                    <input
+                    <select className=" form-control "  onClick={handleInputChangeAgente}>
+                    <option selected>Selecciona un agente  </option>
+                    {Agentes.map((data, i) => {
+                    return(
+                        <option key={i} value={data}>{data}</option>
+                    )
+                    
+                    })
+                    }
+                </select>
+                   { /*<input
                     required
                         type="text"
                         className="form-control"
@@ -422,7 +438,7 @@ const AddTutorial = () => {
                         name="agente"
                         value={tutorial.agente}
                         onChange={handleInputChange}
-                    />
+                   />*/}
                 </div>
                 </div>
                 <div className="col-md-6">

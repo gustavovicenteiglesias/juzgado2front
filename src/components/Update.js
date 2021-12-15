@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
-
+import Agentes from "./Agentes"
 
 const Tutorial = props => {
   const initialTutorialState = {
@@ -56,6 +56,10 @@ const Tutorial = props => {
   useEffect(() => {
     getTutorial(props.match.params.id);
   }, [props.match.params.id]);
+  const handleInputChangeAgente=event=>{
+    console.log(event.target.value)
+    setCurrentTutorial({ ...currentTutorial, agente: event.target.value });
+  }
 
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -401,14 +405,24 @@ const Tutorial = props => {
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="agente">Agente</label>
-                    <input
+                    <select className=" form-control "  onClick={handleInputChangeAgente}>
+                    <option selected>{currentTutorial.agente } </option>
+                    {Agentes.map((data, i) => {
+                    return(
+                        <option key={i} value={data} name={data}>{data}</option>
+                    )
+                    
+                    })
+                    }
+                </select>
+                    {/*<input
                         type="text"
                         className="form-control"
                         id="agente"
                         name="agente"
                         value={currentTutorial.agente}
                         onChange={handleInputChange}
-                    />
+                    />*/}
                 </div>
                 </div>
                 <div className="col-md-6">
