@@ -1,6 +1,7 @@
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import TutorialDataService from "../services/TutorialService";
+import CurrencyInput from 'react-currency-input-field';
 import Agentes from "./Agentes"
 
 const Tutorial = props => {
@@ -67,50 +68,52 @@ const Tutorial = props => {
     setCurrentTutorial({ ...currentTutorial, [name]: value });
   };
 
-  /*const updatePublished = status => {
-    var data = {
-        id: currentTutorial.id,
-        acta:currentTutorial.acta,
-        fecha:currentTutorial.fecha,
-        nombre:currentTutorial.nombre,
-        direccion:currentTutorial.direccion,
-        codigoPostal:currentTutorial.codigoPostal,
-        localidad:currentTutorial.localidad,
-        provincia:currentTutorial.provincia,
-        dni:currentTutorial.dni,
-        descripcion:currentTutorial.descripcion,
-        lugar:currentTutorial.lugar,
-        vehiculo:currentTutorial.vehiculo,
-        dominio:currentTutorial.dominio,
-        agente:currentTutorial.agente,
-        actoResolutorio:currentTutorial.actoResolutorio,
-        fechaResolucion:currentTutorial.fechaResolucion,
-        leyOrdenanza:currentTutorial.leyOrdenanza,
-        articulo:currentTutorial.articulo,
-        inciso:currentTutorial.inciso,
-        comentario:currentTutorial.comentario,
-        intervino:currentTutorial.intervino,
-        valor:currentTutorial.valor
-      
-    };
-
-    TutorialDataService.update(currentTutorial.id, data)
-      .then(response => {
-        
-        console.log(response.data);
-        setMessage("La actualizacion a sido exitosa!");
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };*/
+  const handleInputChangeValor = (name,value) => {
+    console.log(name,value)
+  //console.log(parseFloat(value.replace(',', '.')));
+  setCurrentTutorial({ ...currentTutorial, [name]: value });
+};
 
   const updateTutorial = () => {
       setSubmitting(true)
-     
+     console.log(parseFloat(currentTutorial.valor.replace(',', '.')))
       console.log(currentTutorial.fecha.split("T",0))
       console.log(currentTutorial)
-    TutorialDataService.update(currentTutorial.id, currentTutorial)
+      var data = {
+        acta: currentTutorial.acta,
+        fecha: currentTutorial.fecha,
+        nombre: currentTutorial.nombre,
+        direccion: currentTutorial.direccion,
+        codigoPostal: currentTutorial.codigoPostal,
+        localidad: currentTutorial.localidad,
+        provincia: currentTutorial.provincia,
+        dni: currentTutorial.dni,
+        descripcion: currentTutorial.descripcion,
+        lugar: currentTutorial.lugar,
+        vehiculo: currentTutorial.vehiculo,
+        dominio: currentTutorial.dominio,
+        agente: currentTutorial.agente,
+        actoResolutorio: currentTutorial.actoResolutorio,
+        fechaResolucion: currentTutorial.fechaResolucion,
+        leyOrdenanza: currentTutorial.leyOrdenanza,
+        articulo: currentTutorial.articulo,
+        inciso: currentTutorial.inciso,
+        comentario: currentTutorial.comentario,
+        intervino: currentTutorial.intervino,
+        valor: parseFloat(currentTutorial.valor.replace(',', '.')) ,
+        unidadValor: currentTutorial.unidadValor,
+        nombreTitular: currentTutorial.nombreTitular,
+        direccionTitular: currentTutorial.direccionTitular,
+        cpTitular: currentTutorial.cpTitular,
+        localidadTitular: currentTutorial.localidadTitular,
+        provinciaTitular: currentTutorial.provinciaTitular,
+        dniTitular: currentTutorial.dniTitular,
+        chasis: currentTutorial.chasis,
+        motor: currentTutorial.motor,
+        causa:currentTutorial.causa
+
+    };
+    TutorialDataService.update(currentTutorial.id, data)
       .then(response => {
         console.log("response ",response.data);
         setMessage("Actualizacion exitosa !");
@@ -131,8 +134,8 @@ const Tutorial = props => {
         console.log(e);
       });
   };
-  console.log("fecha",currentTutorial.fecha)
-  console.log(moment().add(2,"months").format("YYYY-MM-DD"))
+  //console.log("fecha",currentTutorial.fecha)
+  //console.log(moment().add(2,"months").format("YYYY-MM-DD"))
   return (
     <div>
       {currentTutorial ? (
@@ -520,14 +523,16 @@ const Tutorial = props => {
                 <div className="col-md-6">
                     <div className="form-group">
                     <label htmlFor="valor">Valor</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="valor"
-                        name="valor"
-                        value={currentTutorial.valor}
-                        onChange={handleInputChange}
-                    />
+                    
+                     <CurrencyInput
+                            className="form-control"
+                                id="valor"
+                                name="valor"
+                                value={currentTutorial.valor}
+                                
+                                decimalsLimit={2}
+                                onValueChange={(value,name)=>handleInputChangeValor(name,value) }
+                            />
                 </div>
                 </div>
             </div>

@@ -223,6 +223,14 @@ const TutorialsList = (props) => {
       Header: "Dominio",
       accessor: "dominio",
     },
+    {
+      Header: "CUIT o DNI Titular",
+      accessor: "dniTitular",
+    },
+    {
+      Header: "Nombre Titular",
+      accessor: "nombreTitular",
+    },
 
 
 

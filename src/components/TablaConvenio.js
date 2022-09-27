@@ -19,9 +19,11 @@ const TablaConvenio=(props)=>{
     const[convenio,setConvenio]=useState(initialConvenioState);
     const [isdisable,setIsDisable]=useState([])
     const [isdisableConvenio,setIsDisableConvenio]=useState(true)
+    const valor=new Intl.NumberFormat('de-DE').format(props.valor)
     useEffect(() => {
        setCuotas(props.cuotas);
        props.cuotas.map((data,i)=> setIsDisable(oldArray => [...oldArray, true]))
+
       }, []);
 
       useEffect(() => {
@@ -193,7 +195,7 @@ return(
                         onChange={handleInputChangeCheck(i)}
                         />
                     </Form.Group></td>
-            <td > {props.valor}</td>
+            <td > {valor}</td>
             {isdisable[i] && <td>
                 <span onClick={() => editCuota(i)} data-tip data-for="editar">
                <i className="far fa-edit action mr-2"></i>
